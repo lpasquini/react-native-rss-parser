@@ -175,6 +175,13 @@ function getItemPublished(node) {
   return utils.getElementTextContent(node, 'pubDate') || utils.getElementTextContent(node, 'dc:date');
 }
 
+function getItemMedia(node) {
+  const medias = utils.getChildElements(node, 'media:content');
+  return medias.map(function(i) {
+    return (i.getAttribute('medium') == 'image' && i.getAttribute('url'))? i.getAttribute('url'): null;
+  });
+}
+
 function getItemEnclosures(node) {
   const enclosures = utils.getChildElements(node, 'enclosure');
 
@@ -201,6 +208,7 @@ function mapItems(document) {
       categories: getItemCategories(item),
       published: getItemPublished(item),
       enclosures: getItemEnclosures(item),
+      media: getItemMedia(item),
       itunes: itunesParser.parseItem(item)
     };
   });
